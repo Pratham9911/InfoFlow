@@ -68,3 +68,33 @@ yarn-error.log*
 # Env / Config
 .env*
 .vercel
+
+# Ignore Python venv
+venv/
+*.pyc
+__pycache__/
+
+# Ignore large ML models
+*.pth
+*.pt
+*.bin
+*.h5
+*.ckpt
+
+# Ignore big libraries
+/summariz_backend/models/
+/summariz_backend/__pycache__/
+
+# Ignore logs and caches
+*.log
+.pytest_cache/
+
+# Ignore node_modules for frontend
+node_modules/
+.next/
+out/
+build/
+
+# Environment files
+.env
+.env.local
