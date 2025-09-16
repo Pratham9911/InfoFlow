@@ -82,8 +82,7 @@ __pycache__/
 *.ckpt
 
 # Ignore big libraries
-/summariz_backend/models/
-/summariz_backend/__pycache__/
+/summariz_backend
 
 # Ignore logs and caches
 *.log

@@ -9,11 +9,16 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@octokit/rest": "^22.0.0",
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
     "firebase": "^12.2.1",
     "form-data": "^4.0.4",
     "formidable": "^3.5.4",
     "lucide-react": "^0.542.0",
+    "multer": "^2.0.2",
     "next": "15.5.2",
+    "node-fetch": "^3.3.2",
     "react": "19.1.0",
     "react-dom": "19.1.0"
   },

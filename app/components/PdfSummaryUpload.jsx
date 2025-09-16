@@ -81,16 +81,6 @@ useEffect(() => {
         }
     };
 
-    // Send PDF to Firebase + save per department
-
-// Utility: convert file to Base64
-const fileToBase64 = (file) =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = (err) => reject(err);
-  });
 
 const sendPDF = async () => {
   if (!file) return alert("Please select a file.");
@@ -98,11 +88,9 @@ const sendPDF = async () => {
   setSending(true);
 
   try {
-    
-
-    // 1️⃣ Convert file to Base64
-    const base64pdf = await fileToBase64(file);
-   
+    // 1️⃣ Convert file to ArrayBuffer then Buffer
+    const arrayBuffer = await file.arrayBuffer();
+    const fileBuffer = Buffer.from(arrayBuffer);
 
     // 2️⃣ Expand "All" into real departments
     let targetDepts = [...departments];
@@ -110,23 +98,38 @@ const sendPDF = async () => {
       targetDepts = ["Engineering", "Operations", "HR"];
     }
 
-    // 3️⃣ Save directly into Firestore
+    // 3️⃣ Upload for each department
     for (let dept of targetDepts) {
       try {
+        const gitResponse = await fetch("http://localhost:3000/api/uploadToGitHub", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            fileName: file.name,
+            fileBuffer: fileBuffer.toString("base64"), // must match API route
+            dept: dept,
+          }),
+        });
+
+        const data = await gitResponse.json();
+        if (!gitResponse.ok) throw new Error(data.error || "Upload failed");
+
+        // 4️⃣ Save metadata in Firestore
         await addDoc(collection(db, "departments", dept, "pdfs"), {
           title: summary?.title || file.name,
-          pdfData: base64pdf, // 🔑 actual file stored here
+          pdfLink: data.url,          // GitHub raw link
           summary: summary?.bullets || "",
           uploadedAt: serverTimestamp(),
         });
-       
+
+        alert(`✅ Uploaded & saved for ${dept}`);
       } catch (e) {
-        alert(`❌ Failed to save for ${dept}: ${e.message}`);
+        alert(`❌ Failed for ${dept}: ${e.message}`);
         console.error(e);
       }
     }
 
-    alert(" PDF stored in Firestore successfully!");
+    alert("🎉 PDF sent successfully!");
   } catch (err) {
     alert("Send failed: " + err.message);
     console.error(err);
@@ -137,34 +140,35 @@ const sendPDF = async () => {
 
 
 
-   // View PDF (local OR from Firestore)
-// Utility: Convert Base64 -> Blob
-function base64ToBlob(base64, mimeType = "application/pdf") {
-    const byteChars = atob(base64);
-    const byteNumbers = new Array(byteChars.length);
-    for (let i = 0; i < byteChars.length; i++) {
-        byteNumbers[i] = byteChars.charCodeAt(i);
-    }
-    const byteArray = new Uint8Array(byteNumbers);
-    return new Blob([byteArray], { type: mimeType });
-}
 
-// View PDF (Base64 OR Local file)
-const viewPDF = (pdfData) => {
-    try {
-        if (pdfData) {
-            // Case 1: Firestore Base64 string
-            const blob = base64ToBlob(pdfData, "application/pdf");
-            const url = URL.createObjectURL(blob);
-            window.open(url, "_blank");
-        } 
-        else {
-            alert("❌ No PDF available");
-        }
-    } catch (err) {
-        alert("Failed to open PDF: " + err.message);
+ 
+
+
+const viewPDF = async () => {
+  try {
+    const snapshot = await getDocs(
+      collection(db, "departments", "Operations", "pdfs") // 🔥 hardcoded dept name
+    );
+
+    if (snapshot.empty) {
+      alert("❌ No PDFs found in Operations");
+      return;
     }
+
+    const firstDoc = snapshot.docs[0].data();
+    console.log("📄 Found PDF document:", firstDoc);
+
+    if (firstDoc?.pdfLink) {
+      window.open(firstDoc.pdfLink, "_blank");
+    } else {
+      alert("❌ No valid PDF link found in Firestore doc");
+    }
+  } catch (err) {
+    alert("Failed to open PDF: " + err.message);
+    console.error(err);
+  }
 };
+
 
 
 
