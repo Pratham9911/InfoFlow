@@ -5,10 +5,12 @@ import { useRouter } from 'next/navigation';
 import Navbar from '@/app/components/Navbar';
 import Sidebar from '@/app/components/Sidebar';
 import EmployeeWidgets from '@/app/components/EmployeeWidgets';
+import NoticeTable from '@/app/components/NoticeTable';
 import { auth, db } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
 import PdfSummaryUpload from '../components/PdfSummaryUpload';
+import IssuesDashboard from '../components/IssuesDashboard';
 
 export default function Dashboard() {
   const router = useRouter();
@@ -18,7 +20,7 @@ export default function Dashboard() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (!user) {
-        router.replace('/login'); // Redirect if not logged in
+        router.replace('/login');
         return;
       }
 
@@ -37,7 +39,7 @@ export default function Dashboard() {
       setLoading(false);
     });
 
-    return () => unsubscribe(); // Cleanup listener on unmount
+    return () => unsubscribe();
   }, [router]);
 
   if (loading) {
@@ -49,25 +51,23 @@ export default function Dashboard() {
   }
 
   if (!userData) {
-    // While unlikely, this prevents rendering if userData is still null
     return null;
   }
 
   return (
     <div className="flex h-screen bg-gray-50">
-      {/* Sidebar (desktop only) */}
       <div className="hidden sm:flex">
         <Sidebar active="dashboard" />
       </div>
 
-      {/* Main content */}
       <div className="flex-1 flex flex-col">
         <Navbar user={userData} />
 
         <main className="flex-1 overflow-y-auto p-6">
-          {/* Only EmployeeWidgets for now */}
           <PdfSummaryUpload />
           <EmployeeWidgets />
+          <IssuesDashboard />
+          <NoticeTable />
         </main>
       </div>
     </div>

@@ -26,7 +26,7 @@ export default function EmployeeWidgets() {
       </div>
 
       {/* Personal Docs */}
-      <div className="p-6 rounded-lg shadow bg-white">
+      <div className="p-6 rounded-lg mb-10 shadow bg-white">
         <h3 className="text-lg font-bold mb-2">Personal Documents</h3>
         <ul className="space-y-2 text-gray-700">
           <li>my_resume.pdf</li>
