@@ -110,7 +110,7 @@ export default function NoticeTable() {
   }
 
   return (
-    <div className="bg-white p-6 rounded-2xl shadow-lg">
+    <div className="bg-white mt-2 p-6 rounded-2xl shadow-lg">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-semibold text-gray-800">Railway Notice Management</h2>
         <div className="flex items-center space-x-2">

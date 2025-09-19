@@ -64,10 +64,9 @@ export default function Dashboard() {
         <Navbar user={userData} />
 
         <main className="flex-1 overflow-y-auto p-6">
-          <PdfSummaryUpload />
-          <EmployeeWidgets />
-          <IssuesDashboard />
+          <PdfSummaryUpload /> 
           <NoticeTable />
+          <IssuesDashboard />
         </main>
       </div>
     </div>
