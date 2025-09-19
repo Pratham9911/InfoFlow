@@ -62,6 +62,7 @@ ENV/
 # -----------------------------
 # Optional: ignore large backend folder contents but keep code
 # Ignore only heavy model files inside summarizer backend
+/summariz_backend
 /summariz_backend/*.bin
 /summariz_backend/*.ckpt
 /summariz_backend/*.pt
