@@ -7,18 +7,17 @@ Thumbs.db
 *.pem
 
 # -----------------------------
-# Dependencies
-/node_modules
-/.pnp
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/versions
+# Node / Frontend
+node_modules/
+.next/
+out/
+build/
+*.tsbuildinfo
+yarn-error.log*
+npm-debug.log*
 
 # -----------------------------
-# Python / Virtual Env
+# Python / Backend
 __pycache__/
 *.py[cod]
 *.pyo
@@ -30,7 +29,7 @@ env/
 ENV/
 
 # -----------------------------
-# Large ML/AI Models & Weights
+# ML / AI Models & Large Files
 *.bin
 *.ckpt
 *.h5
@@ -42,58 +41,28 @@ ENV/
 *.model
 *.weights
 
-# Torch / Tensorflow libs (large files)
-/*.dll
-/*.lib
+# Ignore large DLL / library files
+*.dll
+*.lib
 *.dylib
 
 # -----------------------------
-# Build / Cache
+# Build / Cache / Coverage
 /build
-/.next/
-/out/
-/dist
-*.tsbuildinfo
-next-env.d.ts
-
-# -----------------------------
-# Coverage & Debug
 /coverage
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
+.pytest_cache/
+*.tsbuildinfo
 
 # -----------------------------
-# Env / Config
-.env*
+# Environment & Secrets
+.env
+.env.*
 .vercel
 
-# Ignore Python venv
-venv/
-*.pyc
-__pycache__/
-
-# Ignore large ML models
-*.pth
-*.pt
-*.bin
-*.h5
-*.ckpt
-
-# Ignore big libraries
-/summariz_backend
-
-# Ignore logs and caches
-*.log
-.pytest_cache/
-
-# Ignore node_modules for frontend
-node_modules/
-.next/
-out/
-build/
-
-# Environment files
-.env
-.env.local
+# -----------------------------
+# Optional: ignore large backend folder contents but keep code
+# Ignore only heavy model files inside summarizer backend
+/summariz_backend/*.bin
+/summariz_backend/*.ckpt
+/summariz_backend/*.pt
+/summariz_backend/*.pth
