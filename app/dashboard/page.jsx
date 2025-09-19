@@ -11,11 +11,12 @@ import { doc, getDoc } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
 import PdfSummaryUpload from '../components/PdfSummaryUpload';
 import IssuesDashboard from '../components/IssuesDashboard';
-
+import Upload from '../components/Upload';
 export default function Dashboard() {
   const router = useRouter();
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [activePage, setActivePage] = useState('dashboard'); // default
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -57,17 +58,23 @@ export default function Dashboard() {
   return (
     <div className="flex h-screen bg-gray-50">
       <div className="hidden sm:flex">
-        <Sidebar active="dashboard" />
+        <Sidebar active={activePage} onChangePage={setActivePage} />
+
       </div>
 
       <div className="flex-1 flex flex-col">
         <Navbar user={userData} />
 
         <main className="flex-1 overflow-y-auto p-6">
-          <PdfSummaryUpload /> 
-          <NoticeTable />
-          <IssuesDashboard />
+          {activePage === 'dashboard' && (
+            <>
+              <NoticeTable />
+              <IssuesDashboard />
+            </>
+          )}
+          {activePage === 'Upload' && <Upload />}
         </main>
+
       </div>
     </div>
   );

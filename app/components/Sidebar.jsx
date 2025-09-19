@@ -6,7 +6,7 @@ import { Home, FileText, Bell, User } from 'lucide-react';
 import { auth, db } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 
-export default function Sidebar({ active = "dashboard" }) {
+export default function Sidebar({ active, onChangePage }) {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -30,15 +30,15 @@ export default function Sidebar({ active = "dashboard" }) {
 
   const initials = user?.name
     ? user.name
-        .split(' ')
-        .map((n) => n[0])
-        .join('')
-        .toUpperCase()
+      .split(' ')
+      .map((n) => n[0])
+      .join('')
+      .toUpperCase()
     : 'U';
 
   const menu = [
     { key: "dashboard", label: "Dashboard", icon: <Home size={18} /> },
-    { key: "documents", label: "Documents", icon: <FileText size={18} /> },
+    { key: "Upload", label: "Upload", icon: <FileText size={18} /> },
     { key: "notifications", label: "Notifications", icon: <Bell size={18} /> },
     { key: "profile", label: "Profile", icon: <User size={18} /> },
   ];
@@ -72,16 +72,17 @@ export default function Sidebar({ active = "dashboard" }) {
           {menu.map((item) => (
             <button
               key={item.key}
-              className={`flex items-center w-full px-4 py-2 rounded-lg text-sm font-medium transition ${
-                active === item.key
+              onClick={() => onChangePage(item.key)} // 🔑 add this
+              className={`flex items-center w-full px-4 py-2 rounded-lg text-sm font-medium transition ${active === item.key
                   ? "bg-blue-100 text-blue-600"
                   : "text-gray-600 hover:bg-gray-100"
-              }`}
+                }`}
             >
               <span className="mr-3">{item.icon}</span>
               {item.label}
             </button>
           ))}
+
         </nav>
       </div>
 
