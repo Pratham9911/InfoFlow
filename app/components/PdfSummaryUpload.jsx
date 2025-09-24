@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react";
 import { db } from "@/lib/firebase";
 import { collection, addDoc, serverTimestamp , getDocs} from "firebase/firestore";
-
-
+import IssuesDashboard from '../components/IssuesDashboard';
+import NoticeTable from './NoticeTable';
 export default function PdfUploadModal() {
     const [isOpen, setIsOpen] = useState(false);
     const [file, setFile] = useState(null);
@@ -67,8 +67,10 @@ useEffect(() => {
         const formData = new FormData();
         formData.append("file", file);
 
+
+// "http://127.0.0.1:8000/upload-pdf/"
         try {
-            const res = await fetch("http://127.0.0.1:8000/upload-pdf/", {
+            const res = await fetch("http://127.0.0.1:8001/upload-pdf-ollama/", {
                 method: "POST",
                 body: formData,
             });
@@ -221,7 +223,8 @@ const viewPDF = async () => {
             >
                 Upload PDF
             </button>
-
+            <NoticeTable />
+            <IssuesDashboard />
             {isOpen && (
                 <div className="fixed inset-0 flex items-center justify-center z-50">
                     <div
@@ -244,8 +247,8 @@ const viewPDF = async () => {
 
                         {/* Department multi-select */}
                         <div className="mb-4">
-                            <label className="block mb-2 font-medium">Select Departments</label>
-                            <div className="flex gap-3">
+                            <label className=" block mb-2 font-medium">Select Departments</label>
+                            <div className="flex gap-3 text-black">
                                 {["Engineering", "Operations", "HR", "All"].map(dept => (
                                     <label key={dept} className="flex items-center gap-1">
                                         <input

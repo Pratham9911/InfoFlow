@@ -2,7 +2,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Home, FileText, Bell, User } from 'lucide-react';
+import { Home, FileText, Bell, User , Activity } from 'lucide-react';
 import { auth, db } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 
@@ -38,9 +38,10 @@ export default function Sidebar({ active, onChangePage }) {
 
   const menu = [
     { key: "dashboard", label: "Dashboard", icon: <Home size={18} /> },
-    { key: "Upload", label: "Upload", icon: <FileText size={18} /> },
+    { key: "Upload", label: "Document", icon: <FileText size={18} /> },
+    { key: "Analysis", label: "Analysis", icon: <Activity size={18} /> },
     { key: "notifications", label: "Notifications", icon: <Bell size={18} /> },
-    { key: "profile", label: "Profile", icon: <User size={18} /> },
+    { key: "Profile", label: "Profile", icon: <User size={18} /> },
   ];
 
   if (!user) {

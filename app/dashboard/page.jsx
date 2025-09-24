@@ -4,14 +4,13 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Navbar from '@/app/components/Navbar';
 import Sidebar from '@/app/components/Sidebar';
-import EmployeeWidgets from '@/app/components/EmployeeWidgets';
-import NoticeTable from '@/app/components/NoticeTable';
 import { auth, db } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
 import PdfSummaryUpload from '../components/PdfSummaryUpload';
-import IssuesDashboard from '../components/IssuesDashboard';
-import Upload from '../components/Upload';
+import SampleHrDashboard from '../components/SampleHrDashboard';
+import SampleAnalysis from '../components/SampleAnalysis';
+import Profile from '../components/Profile';
 export default function Dashboard() {
   const router = useRouter();
   const [userData, setUserData] = useState(null);
@@ -68,11 +67,12 @@ export default function Dashboard() {
         <main className="flex-1 overflow-y-auto p-6">
           {activePage === 'dashboard' && (
             <>
-              <NoticeTable />
-              <IssuesDashboard />
+            <SampleHrDashboard />
             </>
           )}
-          {activePage === 'Upload' && <Upload />}
+          {activePage === 'Upload' && <PdfSummaryUpload/>}
+          {activePage === 'Analysis' && <SampleAnalysis />}
+          {activePage === 'Profile' && <Profile />}
         </main>
 
       </div>
